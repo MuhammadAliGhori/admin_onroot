@@ -1,13 +1,38 @@
 import React, { useState } from "react";
 import styles from "../style/signin.module.css";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import axios from "axios";
+import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login() {
-  const [storedUserID, setStoredUserID] = useState("");
-  const [storedEmail, setStoredEmail] = useState("");
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const handleLogin = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/admin/login",
+        values
+      );
+      if (response.status === 200) {
+        console.log("Login successful.");
+        router.push("/userlist");
+      } else {
+        console.error("Password reset failed.");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+
+  const validationSchema = Yup.object({
+    userId: Yup.string().required("Required"),
+    password: Yup.string().required("Required"),
+  });
   return (
     <div className={`row ${styles.confirmme}`}>
       <div className="col-lg-12 d-flex justify-content-center">
@@ -21,22 +46,22 @@ export default function Login() {
           </p>
           <Formik
             initialValues={{
-              email: "",
+              userId: "",
               password: "",
             }}
-            validationSchema=""
-            onSubmit=""
+            validationSchema={validationSchema}
+            onSubmit={handleLogin}
           >
             {({ isValid }) => (
               <Form>
                 <Field
-                  name="email"
+                  name="userId"
                   style={{ padding: "10px" }}
                   className="form-control rounded-3 border-0 mt-2"
-                  placeholder="Email"
+                  placeholder="userId"
                 />
                 <ErrorMessage
-                  name="email"
+                  name="userId"
                   component="div"
                   className="text-light"
                 />
@@ -64,7 +89,7 @@ export default function Login() {
                       color: "black",
                     }}
                   >
-                    {/* <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} /> */}
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                   </button>
                 </div>
                 <ErrorMessage

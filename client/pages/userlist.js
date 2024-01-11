@@ -1,10 +1,10 @@
 import React from 'react'
-import ConfirmSignUp from '../website/ConfirmSignUp'
+import UserList from '../website/UserList'
 
 export default () => {
   return (
     <div>
-        <ConfirmSignUp />
+        <UserList />
     </div>
   )
 }

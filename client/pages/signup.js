@@ -1,10 +1,10 @@
 import React from "react";
-import SignUp from "../website/SignUp";
+// import SignUp from "../website/SignUp";
 
 export default () => {
   return (
     <div>
-      <SignUp />
+      {/* <SignUp /> */}
     </div>
   );
 };
