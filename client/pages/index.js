@@ -1,12 +1,12 @@
 import Title from "../components/Title";
-import Login from "./login";
+import HomePage from "../website/HomePage";
 
 export default ({ data }) => {
   console.log(data);
   return (
     <div>
       <Title title="Home" />
-      <Login />
+      <HomePage />
     </div>
   );
 };

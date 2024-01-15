@@ -20,7 +20,7 @@ export default function Login() {
       );
       if (response.status === 200) {
         console.log("Login successful.");
-        router.push("/userlist");
+        router.push("/");
       } else {
         console.error("Password reset failed.");
       }
@@ -100,11 +100,11 @@ export default function Login() {
 
                 <div className="text-center">
                   <button
-                    className="savebtn1 text-light mt-4 cursor-pointer"
+                    className="bg-light rounded-2 border-0 px-3 text-dark mt-4 cursor-pointer"
                     type="submit"
                     disabled={!isValid}
                   >
-                    Login
+                    <h5 className="mb-0 fw-bold py-2 px-2">Login</h5>
                   </button>
                   <div className="text-center mt-3">
                     <Link
@@ -113,13 +113,13 @@ export default function Login() {
                     >
                       Forgot Password?
                     </Link>{" "}
-                    <br />
+                    {/* <br />
                     <Link
                       href="/signup"
                       style={{ color: "#fff", textDecoration: "none" }}
                     >
                       New member? Register here.
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </Form>

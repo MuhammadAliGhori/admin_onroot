@@ -1,10 +1,10 @@
 import React from "react";
-// import SignUp from "../website/SignUp";
+import TotalItineraries from "../website/TotalItineraries ";
 
 export default () => {
   return (
     <div>
-      {/* <SignUp /> */}
+      <TotalItineraries />
     </div>
   );
 };

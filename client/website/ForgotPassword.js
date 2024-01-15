@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../styles/signin.module.css";
+import styles from "../style/signin.module.css";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -84,7 +84,7 @@ function ForgotPassword() {
 
                     <div className="text-center">
                       <button
-                        className="savebtn1 text-light mt-4"
+                        className=" text-dark border-0 px-4 fw-bold rounded-3 py-2 mt-4"
                         type="submit"
                         disabled={!isValid}
                       >
