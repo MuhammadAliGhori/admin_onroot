@@ -5,15 +5,56 @@ import Link from "next/link";
 import { DataContext } from "./DataContext";
 
 export default function UserList() {
-  const { data ,totalRecommendations} = useContext(DataContext);
-
+  const { data, recommendation, trips } = useContext(DataContext);
   const [users, setUsers] = useState([]);
+  const [filteredRecommendations, setFilteredRecommendations] = useState([]);
+  const [filterTrips, setFilterTrips] = useState();
+  const [userStats, setUserStats] = useState([]);
+
   useEffect(() => {
     setUsers(data.users);
-  }, []);
+    if (Array.isArray(recommendation)) {
+      const filteredRecs = recommendation.filter((rec) =>
+        data.users.some((user) => user._id === rec.userID)
+      );
+      setFilteredRecommendations(filteredRecs);
+    }
+  }, [data.users, recommendation]);
 
+  useEffect(() => {
+    setUsers(data.users);
 
-  // Columns definition
+    if (Array.isArray(recommendation)) {
+      const userStatsData = data.users.map((user) => {
+        const userRecommendations = recommendation.filter(
+          (rec) => rec.userID === user._id
+        );
+        const userTrips = trips.filter((trip) => trip.userID === user._id);
+
+        return {
+          userId: user._id,
+          userName: `${user.firstName} ${user.lastName}`,
+          region: ` ${user.region}`,
+          recommendationsCount: userRecommendations.length,
+          tripsCount: userTrips.length,
+        };
+      });
+
+      setUserStats(userStatsData);
+    }
+  }, [data.users, recommendation, trips]);
+
+  console.log(users, "aliii");
+  // trips of users
+  useEffect(() => {
+    const filteredTrips = trips.filter((trip) =>
+      data.users.some((user) => user._id === trip.userID)
+    );
+    setFilterTrips(filteredTrips);
+  }, [data.users, trips]);
+
+  console.log(filteredRecommendations, "filteredRecommendations");
+
   const columns = React.useMemo(
     () => [
       //   { Header: "ID", accessor: "_id" },
@@ -27,15 +68,14 @@ export default function UserList() {
   );
 
   return (
-    <div
-      className="d-flex justify-content-center flex-column p-5"
-    >
+    <div className="d-flex justify-content-center flex-column p-5">
       <h1 className="text-center fw-bold mb-3 text-decoration-underline">
         User List {data.users.length}
       </h1>
 
       <div className="d-flex flex-wrap justify-content-between gap-3">
         {users.map((post, index) => {
+          const userStat = userStats[index];
           return (
             <div className="" key={index}>
               <Toast>
@@ -59,6 +99,15 @@ export default function UserList() {
                     <strong className="me-auto">Username </strong>
                     <small>{post.username}</small>
                   </div>
+                  <div className="d-flex justify-content-between mt-1">
+                    <strong className="me-auto">Recommendations </strong>
+                    <small>{userStat.recommendationsCount}</small>
+                  </div>
+
+                  <div className="d-flex justify-content-between mt-1">
+                    <strong className="me-auto">Trips </strong>
+                    <small>{userStat.tripsCount}</small>
+                  </div>
                 </Toast.Body>
               </Toast>
             </div>
@@ -72,11 +121,11 @@ export default function UserList() {
             <h3 className="">Total Itineraries : 000</h3>
           </div>
         </Link>
-        <Link href="/totalrecommendations" className="text-decoration-none">
+        <Link href="/recommendation" className="text-decoration-none">
           <div className="p-3 bg-info text-light rounded-3">
             <h3>
               Total Recommandations :{" "}
-              {totalRecommendations ? totalRecommendations.length : "No Data"}
+              {recommendation ? recommendation.length : "No Data"}
             </h3>
           </div>
         </Link>

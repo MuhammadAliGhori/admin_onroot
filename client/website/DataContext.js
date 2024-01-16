@@ -7,9 +7,13 @@ const DataProvider = ({ children }) => {
   const [data, setData] = useState({
     users: [],
   });
-  const [totalRecommendations, setTotalRecommendations] = useState(0);
+  const [recommendation, setRecommendation] = useState(0);
+  const [totalRecommendations, setTotalRecommendations] = useState();
   const [trips, setTrips] = useState([]);
+  const userID = data.users.map((user) => user._Id);
 
+  console.log(totalRecommendations, userID, "totalRecommendations");
+  // users
   useEffect(() => {
     fetch("http://localhost:4000/api/users/getusers")
       .then((response) => response.json())
@@ -22,32 +26,53 @@ const DataProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching initial data:", error));
     fetch("http://localhost:4000/api/createrecommendation")
       .then((response) => response.json())
-      .then((data) => setTotalRecommendations(data.Recommendations))
+      .then((data) => setRecommendation(data.Recommendations))
       .catch((error) =>
         console.error("Error fetching total recommendations count:", error)
       );
   }, []);
-
-
+  // usertrips
   useEffect(() => {
-    fetch('http://localhost:4000/api/trips')
-      .then(response => response.json())
-      .then(data => setTrips(data))
-      .catch(error => console.error('Error fetching data:', error));
+    const fetchUserRecommendations = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/recommendations/${userID}/recommendations`
+        );
+        setTotalRecommendations(response.data.Recommendations);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user recommendations:", error);
+        // setLoading(false);
+      }
+    };
+
+    fetchUserRecommendations();
+  }, [userID]);
+
+  // trips
+  useEffect(() => {
+    fetch("http://localhost:4000/api/trips")
+      .then((response) => response.json())
+      .then((data) => setTrips(data))
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-// del trip
-
-const deleteTrip = async (tripId) => {
+  // del trip
+  const deleteTrip = async (tripId) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/trips/${tripId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/trips/${tripId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.ok) {
-        setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
+        setTrips((prevTrips) =>
+          prevTrips.filter((trip) => trip._id !== tripId)
+        );
       } else {
         console.error("Failed to delete trip");
       }
@@ -56,7 +81,18 @@ const deleteTrip = async (tripId) => {
     }
   };
   return (
-    <DataContext.Provider value={{ data, setData, totalRecommendations, setTotalRecommendations,trips, setTrips,deleteTrip }}>
+    <DataContext.Provider
+      value={{
+        data,
+        setData,
+        recommendation,
+        setRecommendation,
+        trips,
+        setTrips,
+        deleteTrip,
+        totalRecommendations,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

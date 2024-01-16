@@ -4,6 +4,7 @@ import logo from "../public/images/logo.svg";
 import styles from "../style/home.module.css";
 import React from "react";
 import { Button } from "react-bootstrap";
+import Dropdown from "react-bootstrap/Dropdown";
 
 export default function Navbar() {
   return (
@@ -107,7 +108,20 @@ export default function Navbar() {
                     </Link>
                   </>
                 )} */}
+                <Dropdown className="mx-2 ">
+                  <Dropdown.Toggle
+                    className="text-light fw-bold"
+                    variant="info"
+                    id="dropdown-basic"
+                  >
+                    Email Notification
+                  </Dropdown.Toggle>
 
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Single User</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">All Users</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
                 <Button
                   className="bg-info border-0 outline-none"
                   // onClick={() => setModalShow(true)}

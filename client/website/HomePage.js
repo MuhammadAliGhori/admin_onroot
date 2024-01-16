@@ -4,8 +4,7 @@ import React from "react";
 import { DataContext } from "./DataContext";
 
 export default function HomePage() {
-  const { data, totalRecommendations, trips } = useContext(DataContext);
-  console.log(data, "ali s data");
+  const { data, recommendation, trips } = useContext(DataContext);
   return (
     <div>
       <div class="homepage_hero">
@@ -13,11 +12,11 @@ export default function HomePage() {
         <div class="w-100 d-flex justify-content-between gap-lg-4 gap-3">
           <div className="px-3 py-5 rounded-3 oned">
             <Link
-              href="/totalrecommendations"
+              href="/recommendation"
               className="text-decoration-none text-dark"
             >
               <h6 class="fw-bold">
-                Total Recommendation : {totalRecommendations.length}
+                Total Recommendation : {recommendation.length} 
               </h6>
             </Link>
           </div>
