@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -148,13 +147,11 @@ exports.loginUserwithGoogle = async (req, res) => {
     const existingEmailUser = await User.findOne({ email });
 
     if (existingEmailUser) {
-      return res
-        .status(201)
-        .json({
-          status: true,
-          message: "Login Successfully",
-          data: existingEmailUser,
-        });
+      return res.status(201).json({
+        status: true,
+        message: "Login Successfully",
+        data: existingEmailUser,
+      });
     } else {
       return res
         .status(201)
@@ -187,12 +184,10 @@ exports.verifyEmail = async (req, res) => {
     );
 
     if (!user) {
-      return res
-        .status(400)
-        .json({
-          status: "failed",
-          message: "Invalid or expired verification token",
-        });
+      return res.status(400).json({
+        status: "failed",
+        message: "Invalid or expired verification token",
+      });
     }
 
     // Verification successful
@@ -575,15 +570,41 @@ exports.contactusMailSend = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: "Users retrieved successfully",
-        data: users,
-      });
+    res.status(200).json({
+      status: true,
+      message: "Users retrieved successfully",
+      data: users,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// user email notify
+exports.sendNotificationEmail = async (to, subject, html) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      auth: {
+        user: "sage.walter@ethereal.email",
+        pass: "j8djkaJY2Xz1cP5DgD",
+      },
+    });
+
+    const mailOptions = {
+      from: "fermin.okuneva75@ethereal.email",
+      to: to,
+      subject: subject,
+      html: html,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Notification email sent successfully");
+    console.log("Message URL:", nodemailer.getTestMessageUrl(info));
+  } catch (error) {
+    console.error("Error sending notification email:", error);
+    throw error;
   }
 };

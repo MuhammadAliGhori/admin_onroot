@@ -7,6 +7,7 @@ const DataProvider = ({ children }) => {
   const [data, setData] = useState({
     users: [],
   });
+  const dataOfUsers = data.users 
   const [recommendation, setRecommendation] = useState(0);
   const [totalRecommendations, setTotalRecommendations] = useState();
   const [trips, setTrips] = useState([]);
@@ -84,6 +85,7 @@ const DataProvider = ({ children }) => {
     <DataContext.Provider
       value={{
         data,
+        dataOfUsers,
         setData,
         recommendation,
         setRecommendation,

@@ -14,7 +14,18 @@ router.post("/logoutUser", userController.logoutUser);
 router.post("/createUserwithGoogle", userController.createUserwithGoogle);
 router.post("/loginUserwithGoogle", userController.loginUserwithGoogle);
 router.post("/contactusMailSend", userController.contactusMailSend);
+// email
+router.post("/mail", async (req, res) => {
+  const { to, subject, html } = req.body;
 
+  try {
+    await userController.sendNotificationEmail(to, subject, html);
+    res.status(200).json({ status: true, message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ status: false, message: "Failed to send email" });
+  }
+});
 // Forgot password - Generate reset token
 router.post("/forgot-password", userController.forgotPassword);
 
