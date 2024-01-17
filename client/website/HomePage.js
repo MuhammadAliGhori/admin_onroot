@@ -16,7 +16,7 @@ export default function HomePage() {
               className="text-decoration-none text-dark"
             >
               <h6 class="fw-bold">
-                Total Recommendation : {recommendation.length} 
+                Total Recommendation : {recommendation.length}
               </h6>
             </Link>
           </div>
