@@ -17,6 +17,7 @@ router.post("/contactusMailSend", userController.contactusMailSend);
 // email
 router.post("/mail", async (req, res) => {
   const { to, subject, html } = req.body;
+  console.log("Received email data:", { to, subject, html });
 
   try {
     await userController.sendNotificationEmail(to, subject, html);

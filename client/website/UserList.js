@@ -5,7 +5,7 @@ import Link from "next/link";
 import { DataContext } from "./DataContext";
 
 export default function UserList() {
-  const { data, recommendation, trips } = useContext(DataContext);
+  const { data, recommendation, trips , totalItenerariLikes} = useContext(DataContext);
   const [users, setUsers] = useState([]);
   const [filteredRecommendations, setFilteredRecommendations] = useState([]);
   const [filterTrips, setFilterTrips] = useState();
@@ -101,12 +101,19 @@ export default function UserList() {
                   </div>
                   <div className="d-flex justify-content-between mt-1">
                     <strong className="me-auto">Recommendations </strong>
-                    <small>{userStat.recommendationsCount}</small>
+                    <small>{userStat?.recommendationsCount}</small>
                   </div>
 
                   <div className="d-flex justify-content-between mt-1">
                     <strong className="me-auto">Trips </strong>
-                    <small>{userStat.tripsCount}</small>
+                    <small>{userStat?.tripsCount}</small>
+                  </div>
+                  <div className="d-flex justify-content-between mt-1">
+                    <strong className="me-auto">Total Trips Like</strong>
+                    <small>
+                      {" "}
+                      {totalItenerariLikes < 1 ? totalItenerariLikes : 0}
+                    </small>
                   </div>
                 </Toast.Body>
               </Toast>

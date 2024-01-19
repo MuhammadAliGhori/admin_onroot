@@ -1,4 +1,5 @@
 // DataContext.js
+import axios from "axios";
 import React, { createContext, useState, useEffect } from "react";
 
 const DataContext = createContext();
@@ -11,8 +12,9 @@ const DataProvider = ({ children }) => {
   const [recommendation, setRecommendation] = useState(0);
   const [totalRecommendations, setTotalRecommendations] = useState();
   const [trips, setTrips] = useState([]);
-  const userID = data.users.map((user) => user._Id);
-
+  const [totalItenerariLikes, setTotalLikes] = useState();
+  const userID = data.users.map((user) => user._id);
+  console.log(totalItenerariLikes, "totalItenerariLikes");
   console.log(totalRecommendations, userID, "totalRecommendations");
   // users
   useEffect(() => {
@@ -58,6 +60,30 @@ const DataProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
+  useEffect(() => {
+    if (userID && userID.length > 0) {
+      userID.forEach((userId) => {
+        fetch(
+          `http://localhost:4000/api/itineraryposts/userLikedItineraries/${userId}`
+        )
+          .then((response) => response.json())
+          .then((likesData) => {
+            console.log(
+              `Likes for User ${userId}:`,
+              likesData.likedItineraries
+            );
+            // You may want to process the data further or store it as needed
+          })
+          .catch((error) =>
+            console.error(
+              `Error fetching total likes count for User ${userId}:`,
+              error
+            )
+          );
+      });
+    }
+  }, [userID]);
+
   // del trip
   const deleteTrip = async (tripId) => {
     try {
@@ -92,6 +118,7 @@ const DataProvider = ({ children }) => {
         trips,
         setTrips,
         deleteTrip,
+        totalItenerariLikes,
         totalRecommendations,
       }}
     >

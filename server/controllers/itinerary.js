@@ -85,6 +85,9 @@ const addItneraryLike = async (req, res) => {
     });
   }
 };
+
+
+// userlike
 const userLikedItinerary = async (req, res) => {
   try {
     const { itineraryID, userID } = req.body;
@@ -107,6 +110,26 @@ const userLikedItinerary = async (req, res) => {
     console.error("Error", error);
     res.status(500).json({
       error: "Failed to check if user liked itinerary. " + error.message,
+    });
+  }
+};
+
+// getlikes
+const userLikedItineraries = async (req, res) => {
+  try {
+    const userID = req.params.userID;
+
+    // Find all itineraries where the user's ID is in the likes array
+    const likedItineraries = await Itinerary.find({ likes: userID });
+
+    return res.status(200).json({
+      likedItineraries,
+      message: likedItineraries.length > 0 ? "User has liked itineraries." : "User has not liked any itineraries.",
+    });
+  } catch (error) {
+    console.error("Error", error);
+    res.status(500).json({
+      error: "Failed to get liked itineraries for the user. " + error.message,
     });
   }
 };
@@ -140,5 +163,6 @@ module.exports = {
   itneraryDetail,
   addItneraryLike,
   userLikedItinerary,
-  getItnerary
+  getItnerary,
+  userLikedItineraries
 };

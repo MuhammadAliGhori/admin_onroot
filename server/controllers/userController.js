@@ -588,8 +588,8 @@ exports.sendNotificationEmail = async (to, subject, html) => {
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "sage.walter@ethereal.email",
-        pass: "j8djkaJY2Xz1cP5DgD",
+        user: "summer.osinski6@ethereal.email",
+        pass: "Md7w9BEsQQWQS7Q8tR",
       },
     });
 
