@@ -3,14 +3,20 @@ import { useTable } from "react-table";
 import Toast from "react-bootstrap/Toast";
 import Link from "next/link";
 import { DataContext } from "./DataContext";
+import { Button, Form, Modal } from "react-bootstrap";
+import Signup from "./SignUp";
+import { API_URL } from "../apiConfig";
 
 export default function UserList() {
-  const { data, recommendation, trips , totalItenerariLikes} = useContext(DataContext);
+  const { data, recommendation, trips, totalItenerariLikes } =
+    useContext(DataContext);
   const [users, setUsers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [filteredRecommendations, setFilteredRecommendations] = useState([]);
   const [filterTrips, setFilterTrips] = useState();
   const [userStats, setUserStats] = useState([]);
-
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
   useEffect(() => {
     setUsers(data.users);
     if (Array.isArray(recommendation)) {
@@ -66,13 +72,54 @@ export default function UserList() {
     ],
     []
   );
+  const handleDeleteUser = async (userID) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/users/profile/${userID}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      const data = await response.json();
+
+      if (data.status) {
+        console.log("User deleted successfully");
+      } else {
+        console.error("Failed to delete user:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error.message);
+    }
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
     <div className="d-flex justify-content-center flex-column p-5">
       <h1 className="text-center fw-bold mb-3 text-decoration-underline">
         User List {data.users.length}
       </h1>
+      <div className="d-flex justify-content-end my-3">
+        <button
+          className="bg-info text-light border-0 p-2 rounded-2"
+          onClick={handleShow}
+        >
+          Create User
+        </button>
+      </div>
 
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Signup />
+        </Modal.Body>
+      </Modal>
       <div className="d-flex flex-wrap justify-content-between gap-3">
         {users.map((post, index) => {
           const userStat = userStats[index];
@@ -85,6 +132,9 @@ export default function UserList() {
                   <small>
                     {post.firstName} {post.lastName}
                   </small>
+                  <button className="savebtn" onClick={() => handleDeleteUser(post._id)}>
+                    Delete
+                  </button>
                 </Toast.Header>
                 <Toast.Body>
                   <div className="d-flex justify-content-between mt-1">
