@@ -39,6 +39,12 @@ const SaveTrips = require("./models/saveTrips");
 // admin
 const adminRoutes = require("./routes/adminRoutes");
 
+// terms
+const termsRoutes = require("./routes/terms");
+
+// policy
+const policyRoutes = require("./routes/privacyRoutes");
+
 app.get("/", (req, res) => {
   res.send("Hi, This is API Developed by Sunny");
 });
@@ -80,6 +86,12 @@ app.use("/api/tripPlans", tripPlan_routes);
 
 // admin
 app.use("/admin", adminRoutes);
+
+// terms
+app.use("/api", termsRoutes);
+
+// policy
+app.use("/api/policy", policyRoutes);
 
 createAdmin();
 
