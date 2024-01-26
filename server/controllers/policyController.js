@@ -23,6 +23,26 @@ exports.getAllPrivacyPolicies = async (req, res) => {
   }
 };
 
+// Edit
+exports.editPrivacyPolicy = async (req, res) => {
+  try {
+    const { heading, section1, section2, section3 } = req.body;
+    const updatedPrivacyPolicy = await PrivacyPolicy.findByIdAndUpdate(
+      req.params.id,
+      { heading, section1, section2, section3 },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedPrivacyPolicy) {
+      return res.status(404).json({ error: 'Privacy policy not found' });
+    }
+
+    res.status(200).json(updatedPrivacyPolicy);
+  } catch (error) {
+    console.error('Error editing privacy policy:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 // Controller function to handle the deletion of a privacy policy
 exports.deletePrivacyPolicy = async (req, res) => {
   try {

@@ -1,8 +1,10 @@
 // components/PrivacyPolicyForm.js
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     heading: "",
     section1: "",
@@ -22,11 +24,9 @@ export default () => {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://localhost:4000/api/policy/create",
-        formData
-      );
+      await axios.post("http://localhost:4000/api/policy/create", formData);
       console.log("Privacy Policy created successfully!");
+      router.push("/policy");
     } catch (error) {
       console.error("Error creating Privacy Policy:", error);
     }
