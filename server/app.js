@@ -45,6 +45,10 @@ const termsRoutes = require("./routes/terms");
 // policy
 const policyRoutes = require("./routes/privacyRoutes");
 
+// about
+const aboutRoutes = require('./routes/routesAbout');
+
+
 app.get("/", (req, res) => {
   res.send("Hi, This is API Developed by Sunny");
 });
@@ -92,6 +96,10 @@ app.use("/api", termsRoutes);
 
 // policy
 app.use("/api/policy", policyRoutes);
+
+// about
+app.use('/api', aboutRoutes);
+
 
 createAdmin();
 
